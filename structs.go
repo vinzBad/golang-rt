@@ -2,12 +2,11 @@ package rt
 
 import (
 	"net/http"
-	"net/url"
 )
 
 //RT is a RequestTracker client
 type RT struct {
-	url        *url.URL
+	apiURL     string
 	user       string
 	password   string
 	client     *http.Client

@@ -15,7 +15,7 @@ func (rt *RT) Login() error {
 	v := url.Values{}
 	v.Add("user", rt.user)
 	v.Add("pass", rt.password)
-	resp, err := rt.client.PostForm(rt.url.String(), v)
+	resp, err := rt.client.PostForm(rt.apiURL, v)
 	if err != nil {
 		return err
 	}
@@ -39,7 +39,7 @@ func (rt *RT) Login() error {
 
 // GetTicket fetches a ticket from RT
 func (rt *RT) GetTicket(id int) (*Ticket, error) {
-	resp, err := rt.client.Get(rt.url.String() + "ticket/" + strconv.Itoa(id) + "/show")
+	resp, err := rt.client.Get(rt.apiURL + "ticket/" + strconv.Itoa(id) + "/show")
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func New(apiURL string, user string, password string) (*RT, error) {
 	}
 	jar, _ := cookiejar.New(nil)
 	rt := RT{
-		url:      parsedURL,
+		apiURL:   parsedURL.String(),
 		user:     user,
 		password: password,
 		client: &http.Client{
