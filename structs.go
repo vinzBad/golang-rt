@@ -11,7 +11,7 @@ type Tracker struct {
 	password   string
 	client     *http.Client
 	isLoggedIn bool
-	Version    string
+	RTVersion    string
 }
 
 //Ticket is a RequestTracker Ticket

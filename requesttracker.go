@@ -31,7 +31,7 @@ func (rt *Tracker) Login() error {
 		return fmt.Errorf("Failed to login: %q", header.message)
 	}
 
-	rt.Version = header.version
+	rt.RTVersion = header.version
 	rt.isLoggedIn = true
 
 	return nil
