@@ -4,8 +4,8 @@ import (
 	"net/http"
 )
 
-//RT is a RequestTracker client
-type RT struct {
+//Tracker is a RequestTracker client
+type Tracker struct {
 	apiURL     string
 	user       string
 	password   string

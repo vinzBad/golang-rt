@@ -11,7 +11,7 @@ import (
 )
 
 // Login to RequestTracker
-func (rt *RT) Login() error {
+func (rt *Tracker) Login() error {
 	v := url.Values{}
 	v.Add("user", rt.user)
 	v.Add("pass", rt.password)
@@ -38,7 +38,7 @@ func (rt *RT) Login() error {
 }
 
 // GetTicket fetches a ticket from RT
-func (rt *RT) GetTicket(id int) (*Ticket, error) {
+func (rt *Tracker) GetTicket(id int) (*Ticket, error) {
 	resp, err := rt.client.Get(rt.apiURL + "ticket/" + strconv.Itoa(id) + "/show")
 	if err != nil {
 		return nil, err
@@ -75,7 +75,7 @@ func (rt *RT) GetTicket(id int) (*Ticket, error) {
 }
 
 // New RequestTracker client
-func New(apiURL string, user string, password string) (*RT, error) {
+func New(apiURL string, user string, password string) (*Tracker, error) {
 	parsedURL, err := url.ParseRequestURI(apiURL)
 	if err != nil {
 		return nil, ErrInvalidAPIURL
@@ -84,7 +84,7 @@ func New(apiURL string, user string, password string) (*RT, error) {
 		return nil, ErrInvalidAPIURL
 	}
 	jar, _ := cookiejar.New(nil)
-	rt := RT{
+	rt := Tracker{
 		apiURL:   parsedURL.String(),
 		user:     user,
 		password: password,
