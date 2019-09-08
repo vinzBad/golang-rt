@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	apiUrl   = "http://localhost:8080/REST/1.0/"
+	apiURL   = "http://localhost:8080/REST/1.0/"
 	user     = "root"
 	password = "password"
 )
@@ -30,16 +30,16 @@ func TestNew(t *testing.T) {
 		t.Errorf("New(%q) didn't detect missing api suffix in URL", validAPIURLWithoutSuffix)
 	}
 
-	_, err = New(apiUrl, "", "")
+	_, err = New(apiURL, "", "")
 
 	if err != nil {
-		t.Errorf("New(%q), didn't accept valid api URL", apiUrl)
+		t.Errorf("New(%q), didn't accept valid api URL", apiURL)
 	}
 }
 
 func TestLogin(t *testing.T) {
 	// test invalid credentials handling
-	tracker, err := New(apiUrl, user, "")
+	tracker, err := New(apiURL, user, "")
 	if err != nil {
 		t.Errorf("Failed to initialize RT client: %q", err)
 	}
@@ -49,7 +49,7 @@ func TestLogin(t *testing.T) {
 		t.Errorf("RT client logged in with invalid credentials")
 	}
 
-	tracker, err = New(apiUrl, user, password)
+	tracker, err = New(apiURL, user, password)
 	if err != nil {
 		t.Errorf("Failed to initialize RT client: %q", err)
 	}
@@ -65,7 +65,7 @@ func TestLogin(t *testing.T) {
 }
 
 func TestGetTicket(t *testing.T) {
-	tracker, err := New(apiUrl, user, password)
+	tracker, err := New(apiURL, user, password)
 	if err != nil {
 		t.Errorf("Failed to initialize RT client: %q", err)
 	}
