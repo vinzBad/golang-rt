@@ -2,7 +2,6 @@ package rt
 
 import (
 	"testing"
-	
 )
 
 func TestParseRtResponseHeader(t *testing.T) {

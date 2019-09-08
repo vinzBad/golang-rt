@@ -16,20 +16,18 @@ type rtResponseHeader struct {
 	message string
 }
 
-
-
 func parseRtResponseHeader(message []byte) (*rtResponseHeader, error) {
 	match := reStatusCode.FindSubmatch(message)
 	if match == nil {
 		return nil, ErrParseRTMessageError
 	}
-	status, err :=  strconv.Atoi(string(match[2]))
+	status, err := strconv.Atoi(string(match[2]))
 	if err != nil {
 		return nil, ErrParseRTMessageError
 	}
 	return &rtResponseHeader{
 		version: string(match[1]),
-		status: status,
+		status:  status,
 		message: string(match[3]),
 	}, nil
 }
