@@ -47,15 +47,15 @@ func (rt *RT) Login() error {
 	if err != nil {
 		return err
 	}
-	version, status, message, err := parseRtResponseHeader(body)
+	header, err := parseRtResponseHeader(body)
 	if err != nil {
 		return err
 	}
-	if status != "200" {
-		return fmt.Errorf("Failed to authorize: %q", message)
+	if header.status != http.StatusOK {
+		return fmt.Errorf("Failed to login: %q", header.message)
 	}
 
-	rt.Version = version
+	rt.Version = header.version
 	rt.isLoggedIn = true
 
 	return nil
@@ -71,13 +71,13 @@ func (rt *RT) GetTicket(id int) (*Ticket, error) {
 	if err != nil {
 		return nil, err
 	}
-	_, status, message, err := parseRtResponseHeader(body)
+	header, err := parseRtResponseHeader(body)
 	if err != nil {
 		return nil, err
 	}
 	// TODO: Check for 404 and other states
-	if status != "200" {
-		return nil, fmt.Errorf("Failed to authorize: %q", message)
+	if header.status != http.StatusOK {
+		return nil, fmt.Errorf("Failed to get ticket: %q", header.message)
 	}
 
 	result, err := parseRTResponseKVs(body)
