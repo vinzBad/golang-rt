@@ -1,0 +1,5 @@
+id: ticket/new
+Queue: General
+Subject: test
+Requestors: foo.bar@localhost, john.doe@localhost
+Priority: 10

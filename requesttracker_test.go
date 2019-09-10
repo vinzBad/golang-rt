@@ -74,22 +74,22 @@ func TestGetTicket(t *testing.T) {
 		t.Errorf("Login() with valid credentials failed: %q", err)
 	}
 	expectedTicket := &Ticket{
-		ID:         13,
+		ID:         1,
 		Queue:      "General",
 		Owner:      "",
 		Creator:    "root",
 		Subject:    "test",
 		Status:     "new",
-		Priority:   "0",
-		Requestors: []string{"root@localhost", "support@localhost"},
+		Priority:   "10",
+		Requestors: []string{"foo.bar@localhost", "john.doe@localhost"},
 		Cc:         []string{""},
 		AdminCc:    []string{""},
 	}
-	ticket, err := tracker.GetTicket(13)
+	ticket, err := tracker.GetTicket(expectedTicket.ID)
 	if err != nil {
-		t.Errorf("GetTicket(13) failed: %q", err)
+		t.Errorf("GetTicket(%v) failed: %q", expectedTicket.ID, err)
 	}
 	if !cmp.Equal(ticket, expectedTicket) {
-		t.Errorf("GetTicket(13) didn't return expected data")
+		t.Errorf("GetTicket(%v) didn't return expected data", expectedTicket.ID)
 	}
 }
