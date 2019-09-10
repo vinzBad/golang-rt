@@ -1,6 +1,8 @@
 package rt
 
 import (
+	"fmt"
+	"io/ioutil"
 	"regexp"
 	"strconv"
 )
@@ -14,6 +16,22 @@ type rtResponseHeader struct {
 	version string
 	status  int
 	message string
+}
+
+func (rt *Tracker) get(path string, a ...interface{}) (*rtResponseHeader, []byte, error) {
+	resp, err := rt.client.Get(fmt.Sprintf(rt.apiURL+path, a...))
+	if err != nil {
+		return nil, nil, err
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, nil, err
+	}
+	header, err := parseRtResponseHeader(body)
+	if err != nil {
+		return nil, nil, err
+	}
+	return header, body, nil
 }
 
 func parseRtResponseHeader(message []byte) (*rtResponseHeader, error) {
