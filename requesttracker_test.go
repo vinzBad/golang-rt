@@ -93,3 +93,34 @@ func TestGetTicket(t *testing.T) {
 		t.Errorf("GetTicket(%v) didn't return expected data", expectedTicket.ID)
 	}
 }
+
+func TestCreateTicket(t *testing.T) {
+	tracker, err := New(apiURL, user, password)
+	if err != nil {
+		t.Errorf("Failed to initialize RT client: %q", err)
+	}
+	err = tracker.Login()
+	if err != nil {
+		t.Errorf("Login() with valid credentials failed: %q", err)
+	}
+
+	expectedSubject := "from go"
+	id, err := tracker.CreateTicket(Ticket{
+		Subject: expectedSubject,
+		Queue:   "General",
+	})
+	if err != nil {
+		t.Errorf("CreateTicket failed: %q", err)
+		t.FailNow()
+	}
+
+	ticket, err := tracker.GetTicket(id)
+	if err != nil {
+		t.Errorf("GetTicket(%v) after CreateTicket failed: %q", id, err)
+	}
+
+	if ticket.Subject != expectedSubject {
+		t.Errorf("ticket.Subject is %v, expected %v", ticket.Subject, expectedSubject)
+	}
+
+}

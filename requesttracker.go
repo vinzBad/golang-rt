@@ -3,6 +3,7 @@ package rt
 import (
 	"fmt"
 	"io/ioutil"
+
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -63,6 +64,47 @@ func (rt *Tracker) GetTicket(id int) (*Ticket, error) {
 		Cc:         strings.Split(result["Cc"], ", "),
 		AdminCc:    strings.Split(result["AdminCc"], ", "),
 	}, nil
+}
+
+// CreateTicket creates a new ticket in RT and returns its id
+func (rt *Tracker) CreateTicket(newTicket Ticket) (int, error) {
+	content := make(map[string]string)
+
+	content["ID"] = "ticket/new"
+	content["Queue"] = newTicket.Queue
+	content["Owner"] = newTicket.Owner
+	content["Subject"] = newTicket.Subject
+	content["Status"] = newTicket.Status
+	content["Priority"] = newTicket.Priority
+	content["Requestors"] = strings.Join(newTicket.Requestors, ", ")
+	content["Cc"] = strings.Join(newTicket.Cc, ", ")
+	content["AdminCc"] = strings.Join(newTicket.AdminCc, ", ")
+
+	c := strings.Builder{}
+	for k, v := range content {
+		c.WriteString(fmt.Sprintf("%v: %v\n", k, v))
+	}
+
+	data := url.Values{}
+	data.Add("content", c.String())
+
+	header, body, err := rt.postForm(data, "ticket/new")
+
+	if err != nil {
+		return 0, err
+	}
+
+	if header.status != http.StatusOK {
+		return 0, ErrCredentialsNeeded
+	}
+
+	comments, err := parseRTResponseComments(body)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return comments[0].id, nil
 }
 
 // New RequestTracker client
